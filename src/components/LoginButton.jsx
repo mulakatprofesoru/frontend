@@ -35,7 +35,7 @@ const LoginButton = () => {
     <header>
     <h1>Mülakat Profesörü</h1>
     <div className="buttons">
-        {isAuthenticated === false ?<button onClick={loginWithRedirect}>Log In</button> : <br />}
+        {isAuthenticated === false ?<button onClick={loginWithRedirect}>Log In</button> : ""}
         {isAuthenticated === true ? <LogoutButton /> : <br />}  
     </div>
   </header>

@@ -1,9 +1,9 @@
-body {
+/* body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     background-color: #f2f2f2;
-}
+} */
 
 header {
     background-color: #333;
@@ -16,10 +16,6 @@ header {
 
 header h1 {
     margin: 0;
-}
-
-header .buttons {
-    display: flex;
 }
 
 header button {
@@ -39,15 +35,7 @@ header button {
     box-shadow: 0 0 20px rgba(104, 85, 224, 0.2);
     transition: 0.4s;
 }
-footer {
-    background-color: #333;
-    color: #fff;
-    padding: 10px;
-    text-align: center;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-}
+
 section {
     text-align: center;
     padding: 20px;
@@ -56,13 +44,6 @@ section {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-}
-
-section .content-buttons {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    size: 100px 100px;
 }
 
 section button {
@@ -80,7 +61,7 @@ section button {
     width: 400px;
 }
 
-.create-note {
+.question {
     position: relative;
     width: 480px;
     margin: 30px auto 20px auto;
@@ -89,7 +70,7 @@ section button {
     border-radius: 7px;
     box-shadow: 0 1px 5px rgb(138, 137, 137);
 }
-.create-note textarea {
+.question textarea {
     width: 100%;
     border: solid;
     padding: 4px;
@@ -103,19 +84,27 @@ section button {
     background-color: #337ab7;
 }
 
-
-.button-container {
-    overflow-x: 100px; 
-    white-space: nowrap; 
+.deneme .button {
+    padding: 5px;
+    margin: 5px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 300px;
+    height: 50px;
 }
 
-.button {
-display: inline-block;
-padding: 10px;
-margin: 5px;
-background-color: #4CAF50;
-color: white;
-border: none;
-border-radius: 5px;
-cursor: pointer;
+.deneme{
+    display: grid;
+    justify-content: center;
+    grid-column: 2;
+    grid-row: 2;
+}
+.deneme_contanier {
+display: grid;
+justify-content: center;
+grid-template-rows: 50px 200px 200px;
+grid-template-columns: 300px 300px 300px;
 }

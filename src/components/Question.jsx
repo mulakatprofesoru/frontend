@@ -69,7 +69,7 @@ const sendPostRequest = async () => {
     }
  
   return(
-      <div className="create-note">
+      <div className="question">
           <div>
               <textarea id="kutu1" rows="5" cols="100" placeholder="Question" value={question}>{question}</textarea>
               <Speech text={question}/>
@@ -77,7 +77,7 @@ const sendPostRequest = async () => {
           <div>
               <textarea id="kutu2" rows="8" cols="100" placeholder="Please enter your answer for question" onChange={(event)=>{setAnswer(event.target.value)}} value={answer}></textarea>
               <p>Microphone: {listening ? 'on' : 'off'}</p>
-              <MicIcon  className="create-note" onClick={takeSpeech}></MicIcon>
+              <MicIcon  className="question" onClick={takeSpeech}></MicIcon>
               {/* <p>{transcript}</p> */}
               <SendIcon fontSize="large" onClick={sendPostRequest} />
           </div>
