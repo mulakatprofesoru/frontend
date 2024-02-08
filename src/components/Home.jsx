@@ -6,11 +6,14 @@ function Home(){
     const QuestionPage = () => {
         navigate('/Question');
     }
+    const DenemePage = () => {
+        navigate('/Deneme');
+    }
     return(
         <section>
             <button onClick={QuestionPage}>Genel</button>
             <button onClick={QuestionPage} >Bilgisayar mühendisliği</button>
-            <button>Deneme</button>
+            <button onClick={DenemePage}>Deneme</button>
         </section>
     );
 }
