@@ -1,10 +1,16 @@
-/* body {
+body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f2f2f2;
-} */
+    background: #eee;
+    background-image: url("https://www.transparenttextures.com/patterns/cubes.png");
 
+}
+
+.buttons{
+    position: relative;
+    right: 20px;
+}
 header {
     background-color: #333;
     color: #fff;
@@ -61,28 +67,9 @@ section button {
     width: 400px;
 }
 
-.question {
-    position: relative;
-    width: 480px;
-    margin: 30px auto 20px auto;
-    background: #fff;
-    padding: 15px;
-    border-radius: 7px;
-    box-shadow: 0 1px 5px rgb(138, 137, 137);
-}
-.question textarea {
-    width: 100%;
-    border: solid;
-    padding: 4px;
-    outline: none;
-    font-size: 1.2em;
-    font-family: inherit;
-    resize: none;
-  }
 
-.speech{
-    background-color: #337ab7;
-}
+
+
 
 .deneme .button {
     padding: 5px;
@@ -107,4 +94,46 @@ display: grid;
 justify-content: center;
 grid-template-rows: 50px 200px 200px;
 grid-template-columns: 300px 300px 300px;
+}
+
+.interview {
+    position: relative;
+    top: 90px;
+    width: 450px;
+    margin: 30px auto 20px auto;
+    background-color: aliceblue;
+    padding: 15px;
+    border-radius: 7px;
+    box-shadow: 0 1px 5px rgb(138, 137, 137);
+}
+.interview textarea {
+    width: 95%;
+    background-color: aliceblue;
+    border: solid;
+    padding: 4px;
+    outline: none;
+    font-size: 1.2em;
+    font-family: inherit;
+    resize: none;
+    height: 80%;
+  }
+.question{
+    height: 150px;
+}
+
+.SendButton{
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+
+.mic{
+ position: relative;
+ bottom: 90px;
+ left: 90%;
+}
+.voice{
+    position: relative;
+    bottom: 40px;
+    left: 90%;
 }

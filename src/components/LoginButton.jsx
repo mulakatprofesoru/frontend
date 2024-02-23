@@ -1,7 +1,8 @@
 import {React , useEffect} from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import LogoutButton from "./LogoutButton";
-import Profile from "./Profile";
+import LoginIcon from '@mui/icons-material/Login';
+
 
 const LoginButton = () => {
   const { user , isAuthenticated,loginWithRedirect } = useAuth0();
@@ -35,7 +36,7 @@ const LoginButton = () => {
     <header>
     <h1>Mülakat Profesörü</h1>
     <div className="buttons">
-        {isAuthenticated === false ?<button onClick={loginWithRedirect}>Log In</button> : ""}
+        {isAuthenticated === false ?<LoginIcon  fontSize={"large"} onClick={loginWithRedirect} /> : ""}
         {isAuthenticated === true ? <LogoutButton /> : <br />}  
     </div>
   </header>
