@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from 'react-router-dom';
+import LoginButton from "./LoginButton";
 
 function Home(){
     const navigate = useNavigate();
@@ -7,14 +8,22 @@ function Home(){
         navigate('/interview');
     }
     const DenemePage = () => {
-        navigate('/Deneme');
+        navigate('/deneme');
+    }
+    const HistoryPage = () => {
+        navigate('/history');
     }
     return(
-        <section>
-            <button onClick={InterviewPage}>Genel</button>
-            <button onClick={InterviewPage} >Bilgisayar mühendisliği</button>
-            <button onClick={DenemePage}>Deneme</button>
-        </section>
+        <div >
+            <LoginButton 
+                history={HistoryPage}
+            />
+            <section>
+                <button className="button" onClick={InterviewPage}>Genel</button>
+                <button className="button" onClick={InterviewPage} >Bilgisayar mühendisliği</button>
+                <button className="button" onClick={DenemePage}>Deneme</button>
+            </section>
+        </div>
     );
 }
 

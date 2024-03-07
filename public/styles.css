@@ -43,26 +43,24 @@ header button {
 }
 
 section {
-    text-align: center;
+    position: fixed;
+    top: 20%;
+    left: 25%;
+    display: flex;
     padding: 20px;
     flex-grow: 20;
-    display: flex;
     flex-direction: row;
     justify-content: center;
-    align-items: center;
+    align-items: center;;
 }
 
-section button {
-    position: relative;
-    top: 150px;
+section button{
     background-color: #337ab7;
     border-radius: 2%;
     color: white;
     border: none;
-    text-align: center;
-    font-size: 40px;
+    font-size: 30px;
     margin: 10px;
-    cursor: pointer;
     height: 300px;
     width: 300px;
 }
@@ -130,4 +128,37 @@ grid-template-columns: 300px 300px 300px;
     position: relative;
     bottom: 40px;
     left: 90%;
+}
+
+.profile-menu{
+    position: fixed;
+    right: 0px;
+    margin: 5px;
+    margin-top: 2%;
+    display: flex;
+    flex-direction: column;
+    width: 100px;
+    align-items: center;
+    padding: 10px;
+    background-color:#333;
+
+}
+
+.profile-menu button{
+    margin: 5px;
+}
+
+.scrollable-window {
+    margin: 20px auto;
+    overflow: auto; 
+    padding: 20px;
+    width: 30vw;
+    position: absolute;
+    left: 0px;
+  }
+
+.scrollable-window button {
+    width: 25vw;
+    height: 10vh;
+    margin: 5px;
 }
