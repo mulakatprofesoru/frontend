@@ -53,23 +53,19 @@ section {
 }
 
 section button {
+    position: relative;
+    top: 150px;
     background-color: #337ab7;
+    border-radius: 2%;
     color: white;
     border: none;
-    padding: 10px 20px;
     text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px;
+    font-size: 40px;
+    margin: 10px;
     cursor: pointer;
-    height: 400px;
-    width: 400px;
+    height: 300px;
+    width: 300px;
 }
-
-
-
-
 
 .deneme .button {
     padding: 5px;
@@ -120,13 +116,11 @@ grid-template-columns: 300px 300px 300px;
 .question{
     height: 150px;
 }
-
 .SendButton{
     position: absolute;
     bottom: 20px;
     right: 20px;
 }
-
 .mic{
  position: relative;
  bottom: 90px;
