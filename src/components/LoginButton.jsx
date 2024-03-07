@@ -1,10 +1,10 @@
 import {React , useEffect} from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import LogoutButton from "./LogoutButton";
 import LoginIcon from '@mui/icons-material/Login';
+import ProfileBox from "./ProfileBox";
 
 
-const LoginButton = () => {
+const LoginButton = (props) => {
   const { user , isAuthenticated,loginWithRedirect } = useAuth0();
 
   const formData= new FormData();
@@ -37,7 +37,9 @@ const LoginButton = () => {
     <h1>Mülakat Profesörü</h1>
     <div className="buttons">
         {isAuthenticated === false ?<LoginIcon  fontSize={"large"} onClick={loginWithRedirect} /> : ""}
-        {isAuthenticated === true ? <LogoutButton /> : <br />}  
+        {isAuthenticated === true ? <ProfileBox 
+          history={props.history}
+        /> : <br />}  
     </div>
   </header>
 
