@@ -4,15 +4,17 @@ import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognitio
 import MicIcon from '@mui/icons-material/Mic';
 import { useSpeechSynthesis } from 'react-speech-kit';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
-
+import FindInPageIcon from '@mui/icons-material/FindInPage';
 
 
 function Interview(){
     const [question,setQuestion]=useState(null);
+    const [clue,setClue]=useState("There is a clue for question");
     const [answer ,setAnswer]=useState(null);
     const [questionAnswer,setData]=useState({questionData:question ,answerData:null});
-    const { speak } = useSpeechSynthesis();
-    
+    const { speak , voices } = useSpeechSynthesis();
+
+    console.log(voices);
     
   //GET
     useEffect(() => {
@@ -22,6 +24,7 @@ function Interview(){
                 if (response.ok) {
                     const data = await response.json();
                     setQuestion(data.data.question);
+                    //setClue(data.data.clue)
                 } else {
                     console.error('Failed to fetch data from Flask using GET');
                 }
@@ -30,7 +33,7 @@ function Interview(){
             }
         };
         fetchData();
-    }, []);
+    }, [question]);
 
     // POST
     const sendPostRequest = async () => {
@@ -72,24 +75,39 @@ function Interview(){
         setAnswer(transcript);
     }
         
-    const voice = () => {
-        speak({ text: question });
+    const voiceText = () => {
+        speak({ text: question , voice:voices[1]});
     };
+    function openWindow() {
+        var hoverWindow = document.getElementById("hoverWindow");
+        hoverWindow.style.display = "block";
+    }
+    
+    function closeWindow() {
+        var hoverWindow = document.getElementById("hoverWindow");
+        hoverWindow.style.display = "none";
+    }
     
     return(
-        <div className="interview">
-            <div className="question">
-                <textarea id="kutu1" rows="5" cols="100" placeholder="Question" value={question}>{question}</textarea>
-                <VolumeUpIcon className="voice" fontSize="large" onClick={voice}></VolumeUpIcon>
+        <div className="container">
+            <div className="interview">
+                <div className="question">
+                    <textarea  rows="5" cols="100"  value={question}>{question}</textarea>
+                    <VolumeUpIcon className="voice" fontSize="large" onClick={voiceText}></VolumeUpIcon>
+                </div>
+                <div className="answer">
+                    <textarea  rows="8" cols="100"  placeholder="Please enter your answer here" onChange={(event)=>{setAnswer(event.target.value)}} value={answer}></textarea>
+                    <MicIcon className="mic" fontSize="large" onClick={takeSpeech}></MicIcon>
+                </div>
+                    <SendIcon className="sendButton" fontSize="large" onClick={sendPostRequest} />
+            </div>
+            <div className="clue">
+                <FindInPageIcon onMouseOver={openWindow} onMouseOut={closeWindow} style={{color: 'black'}} fontSize="large"/>
+                <p id="hoverWindow">{clue}</p>
             </div>
 
-            <div className="answer">
-                <textarea id="kutu2" rows="8" cols="100" placeholder="Please enter your answer for question" onChange={(event)=>{setAnswer(event.target.value)}} value={answer}></textarea>
-                <p>Microphone: {listening ? 'on' : 'off'}</p>
-                <MicIcon className="mic" fontSize="large" onClick={takeSpeech}></MicIcon>
-            </div>
-                <SendIcon className="SendButton" fontSize="large" onClick={sendPostRequest} />
         </div>
+
   );
 }
 

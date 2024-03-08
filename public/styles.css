@@ -89,45 +89,60 @@ justify-content: center;
 grid-template-rows: 50px 200px 200px;
 grid-template-columns: 300px 300px 300px;
 }
-
+.container{
+    display: grid;
+    grid-template:100px 450px 400px / 500px 400px 400px 400px 400px ;
+    justify-items: center;
+    align-items: center;
+}
 .interview {
-    position: relative;
-    top: 90px;
-    width: 450px;
-    margin: 30px auto 20px auto;
+    grid-column-start: 3;
+    grid-row-start: 2;
+    width: 400px;
+    height: 400px;
     background-color: aliceblue;
-    padding: 15px;
+    padding: 10px;
     border-radius: 7px;
     box-shadow: 0 1px 5px rgb(138, 137, 137);
+    text-align: center;
+}
+.question{
+    height: 150px;  
+}
+.asnwer{
+    height: 200px;
 }
 .interview textarea {
     width: 95%;
     background-color: aliceblue;
     border: solid;
-    padding: 4px;
     outline: none;
     font-size: 1.2em;
     font-family: inherit;
     resize: none;
     height: 80%;
   }
-.question{
-    height: 150px;
-}
-.SendButton{
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
+
+.sendButton{
+    position: relative;
+    left: 48%;
+
 }
 .mic{
- position: relative;
- bottom: 90px;
- left: 90%;
+    position: relative;
+    bottom: 40px;
+    left: 43%;
 }
 .voice{
     position: relative;
     bottom: 40px;
-    left: 90%;
+    left: 43%;
+}
+.clue{
+    width: 300px;
+    grid-row-start: 3;
+    grid-column-start: 3;
+    display: flex;
 }
 
 .profile-menu{
