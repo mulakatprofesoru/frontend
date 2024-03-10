@@ -91,12 +91,12 @@ grid-template-columns: 300px 300px 300px;
 }
 .container{
     display: grid;
-    grid-template:100px 450px 400px / 500px 400px 400px 400px 400px ;
+    grid-template:100px 450px 400px / 700px 400px 400px 400px 400px ;
     justify-items: center;
     align-items: center;
 }
 .interview {
-    grid-column-start: 3;
+    grid-column-start: 2;
     grid-row-start: 2;
     width: 400px;
     height: 400px;
@@ -141,8 +141,11 @@ grid-template-columns: 300px 300px 300px;
 .clue{
     width: 300px;
     grid-row-start: 3;
-    grid-column-start: 3;
+    grid-column-start: 2;
     display: flex;
+}
+#hoverWindow{
+    display: none;
 }
 
 .profile-menu{
@@ -164,16 +167,38 @@ grid-template-columns: 300px 300px 300px;
 }
 
 .scrollable-window {
-    margin: 20px auto;
-    overflow: auto; 
-    padding: 20px;
-    width: 30vw;
-    position: absolute;
-    left: 0px;
+    display: grid;
+    grid-template-columns: 200px 200px 300px 300px auto ;
+    overflow: auto;  
   }
 
-.scrollable-window button {
+.history-container{
+    grid-column: 1;
+    padding: 5px;
+    width: 200px;
+    height: 80px;
+
+}
+.history-container button{
+    width: 200px;
+    height: 80px;
+
+}
+
+#helper-box{
+    display: none;
+    position: absolute;
+    border: solid;
+    min-width:500px;
+    min-height:500px;
+    top: 10%;
+    left: 50%;
+
+}
+
+
+/* .scrollable-window button {
     width: 25vw;
     height: 10vh;
     margin: 5px;
-}
+} */
