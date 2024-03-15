@@ -33,11 +33,10 @@ function Interview(){
             }
         };
         fetchData();
-    }, [question]);
+    }, [questionAnswer]);
 
     // POST
     const sendPostRequest = async () => {
-        setData(()=>{return {answerData:answer,questionData:question}});
         try {
             const response = await fetch('http://localhost:5000/api/data', {
                 method: 'POST',
@@ -58,6 +57,7 @@ function Interview(){
 
         setQuestion("");
         setAnswer("");
+        setData(()=>{return {answerData:answer,questionData:question}});
     };
 
     const {
