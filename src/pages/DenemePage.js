@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 function DenemePage(){
   const navigate = useNavigate();
     const InterviewPage = () => {
-        navigate('/interview');
+        navigate('/deneme_question');
     }
   return (
       <div className="deneme_contanier">

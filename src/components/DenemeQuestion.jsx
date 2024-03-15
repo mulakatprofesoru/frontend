@@ -7,16 +7,15 @@ import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import FindInPageIcon from '@mui/icons-material/FindInPage';
 
 
-function Interview(){
+function DenemeQuestion(){
     const [question,setQuestion]=useState("Question");
     const [clue,setClue]=useState("There is a clue for question");
     const [answer ,setAnswer]=useState(null);
-    const [questionAnswer,setData]=useState({questionData:question ,answerData:null});
+    const [questionAnswer,setData]=useState([]);
     const { speak , voices } = useSpeechSynthesis();
-
-    console.log(voices);
+    const [finished , setFinished] = useState(true);
     
-  //GET
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -32,19 +31,17 @@ function Interview(){
                 console.error('Error:', error);
             }
         };
-        fetchData();
-    }, [question]);
+            fetchData();
+    }, [questionAnswer]);
 
-    // POST
     const sendPostRequest = async () => {
-        setData(()=>{return {answerData:answer,questionData:question}});
         try {
             const response = await fetch('http://localhost:5000/api/data', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({answerData:answer,questionData:question}),
+                body: JSON.stringify(questionAnswer),
             });
 
             if (response.ok) {
@@ -55,10 +52,19 @@ function Interview(){
         } catch (error) {
             console.error('Error:', error);
         }
+    };
 
+    function takeAnswer(){
+        setData(prevData => {
+            return [...prevData, { question: question, answer: answer }];
+          });
         setQuestion("");
         setAnswer("");
-    };
+        if(questionAnswer.length===9){
+            sendPostRequest();
+            setFinished(false);
+        }
+    }
 
     const {
         transcript,
@@ -90,6 +96,7 @@ function Interview(){
     }
     
     return(
+        finished &&(
         <div className="container">
             <div className="interview">
                 <div className="question">
@@ -100,16 +107,16 @@ function Interview(){
                     <textarea  rows="8" cols="100"  placeholder="Please enter your answer here" onChange={(event)=>{setAnswer(event.target.value)}} value={answer}></textarea>
                     <MicIcon className="mic" fontSize="large" onClick={takeSpeech}></MicIcon>
                 </div>
-                    <SendIcon className="sendButton" fontSize="large" onClick={sendPostRequest} />
+                    <SendIcon className="sendButton" fontSize="large" onClick={takeAnswer} />
             </div>
             <div className="clue">
                 <FindInPageIcon onMouseOver={openWindow} onMouseOut={closeWindow} style={{color: 'black'}} fontSize="large"/>
                 <p id="hoverWindow">{clue}</p>
             </div>
 
-        </div>
+        </div>)
     );
 
 }
 
-export default Interview;    
+export default DenemeQuestion;    
