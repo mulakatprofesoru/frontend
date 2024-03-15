@@ -91,12 +91,12 @@ grid-template-columns: 300px 300px 300px;
 }
 .container{
     display: grid;
-    grid-template:100px 450px 400px / 700px 400px 400px 400px 400px ;
+    grid-template:100px 400px 400px / 500px 400px 400px;
     justify-items: center;
     align-items: center;
 }
 .interview {
-    grid-column-start: 2;
+    grid-column-start: 3;
     grid-row-start: 2;
     width: 400px;
     height: 400px;
@@ -141,7 +141,7 @@ grid-template-columns: 300px 300px 300px;
 .clue{
     width: 300px;
     grid-row-start: 3;
-    grid-column-start: 2;
+    grid-column-start: 3;
     display: flex;
 }
 #hoverWindow{
@@ -174,31 +174,26 @@ grid-template-columns: 300px 300px 300px;
 
 .history-container{
     grid-column: 1;
-    padding: 5px;
+    margin-top: 10px;
+    margin-left: 20px;
+    padding: 10px;
     width: 200px;
     height: 80px;
 
 }
 .history-container button{
-    width: 200px;
+    width: 500px;
     height: 80px;
-
+    border-radius: 7px;
+    box-shadow: 0 1px 10px rgb(116, 115, 115);
 }
 
 #helper-box{
     display: none;
-    position: absolute;
+    position: fixed;
     border: solid;
     min-width:500px;
-    min-height:500px;
+    min-height:500px;   
     top: 10%;
     left: 50%;
-
 }
-
-
-/* .scrollable-window button {
-    width: 25vw;
-    height: 10vh;
-    margin: 5px;
-} */
