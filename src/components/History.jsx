@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import HistoryHelperBox from "./HistoryHelperBox";
+import { useAuth0 } from "@auth0/auth0-react";
+import axios from "axios";
 
-function History (){
+function History(){
   const [modal,setModal] = useState(false);
   const [notes, setNotes] = useState([ " ",  " ",  " ", " ",  " ", " ",  " ", " ", " "," ", " ",  " ",  " ", " ",  " ", " ",  " ", " ", " "," "]);
+  const {user} = useAuth0();
 
   function openModal(){
     var box= document.getElementById("helper-box");
@@ -19,10 +22,10 @@ function History (){
   return(
     <div class="scrollable-window">
       <HistoryHelperBox
-        question={"Soru"}
-        userAnswer={"Kullanıcı cevabı"}
-        answer={"cevap"}
-        skor={"skor"}
+        question={notes.question}
+        userAnswer={notes.userAnswer}
+        answer={notes.answer}
+        skor={notes.skor}
       />
       
       {notes.map(() => {

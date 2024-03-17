@@ -5,9 +5,11 @@ import MicIcon from '@mui/icons-material/Mic';
 import { useSpeechSynthesis } from 'react-speech-kit';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import FindInPageIcon from '@mui/icons-material/FindInPage';
+import axios from "axios";
 
 
 function DenemeQuestion(){
+    const [questionId , setQuestionId]=useState();
     const [question,setQuestion]=useState("Question");
     const [clue,setClue]=useState("There is a clue for question");
     const [answer ,setAnswer]=useState(null);
@@ -19,11 +21,11 @@ function DenemeQuestion(){
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('http://localhost:5000/api/questions/random');
-                if (response.ok) {
-                    const data = await response.json();
-                    setQuestion(data.data.question);
-                    //setClue(data.data.clue)
+                const response = await axios.get('http://localhost:5000/api/questions/random');
+                if (response.status === 200){
+                    setQuestionId(response.data.question_id);
+                    setQuestion(response.data.data.question);
+                    //setClue(response.data.data.clue)
                 } else {
                     console.error('Failed to fetch data from Flask using GET');
                 }

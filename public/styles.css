@@ -197,3 +197,14 @@ grid-template-columns: 300px 300px 300px;
     top: 10%;
     left: 50%;
 }
+
+.arrow-back{
+    position: fixed;
+    top: 2%;
+    left: 2%;
+}
+.arrow-forward{
+    position: fixed;
+    bottom: 5%;
+    right: 3%;
+}
