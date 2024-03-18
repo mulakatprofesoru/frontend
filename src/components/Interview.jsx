@@ -42,7 +42,8 @@ function Interview(){
         try {
             const response = await axios.post('http://localhost:5000/api/data', {
                 answerData: answer,
-                questionData: question
+                questionData: question,
+                questionId:questionId,
             }, {
                 headers: {
                     'Content-Type': 'application/json'
