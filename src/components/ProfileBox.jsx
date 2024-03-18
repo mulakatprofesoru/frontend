@@ -9,6 +9,23 @@ const ProfileBox = (props) => {
     modalAcik===true?setModalAcik(false):setModalAcik(true);
   };
 
+  const sendLogoutInfo = async () => {
+    try {
+      logout();
+      const response = await fetch('http://localhost:5000/api/users/logout', {
+          method: 'POST',
+      });
+
+      if (response.ok) {
+          console.log('Data sent successfully to Flask using POST');
+      } else {
+          console.error('Failed to send data to Flask using POST');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+ }
+
   return (
     
     <div>
@@ -17,7 +34,7 @@ const ProfileBox = (props) => {
         {modalAcik && (
           <div className="profile-menu">
             <button onClick={props.history}>History</button>
-            <button onClick={logout}>Logout</button>
+            <button onClick={sendLogoutInfo}>Logout</button>
           </div>
         )}
       </div>

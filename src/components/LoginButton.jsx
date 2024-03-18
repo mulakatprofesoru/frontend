@@ -14,7 +14,7 @@ const LoginButton = (props) => {
     try {
       formData.append('email', user.email);
       formData.append('password', user.email);
-      const response = await fetch('http://localhost:5000/api/users/addUser', {
+      const response = await fetch('http://localhost:5000/api/users/login', {
           method: 'POST',
           body: formData,
       });
