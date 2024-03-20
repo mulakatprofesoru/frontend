@@ -5,6 +5,9 @@ import MicIcon from '@mui/icons-material/Mic';
 import { useSpeechSynthesis } from 'react-speech-kit';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import FindInPageIcon from '@mui/icons-material/FindInPage';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 
 
@@ -12,11 +15,14 @@ function DenemeQuestion(){
     const [questionId , setQuestionId]=useState();
     const [question,setQuestion]=useState("Question");
     const [clue,setClue]=useState("There is a clue for question");
-    const [answer ,setAnswer]=useState(null);
+    const [answer ,setAnswer]=useState("");
     const [questionAnswer,setData]=useState([]);
     const { speak , voices } = useSpeechSynthesis();
     const [finished , setFinished] = useState(true);
-    
+    const navigate = useNavigate();
+    const DenemePage = () => {
+        navigate('/deneme');
+    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -99,24 +105,34 @@ function DenemeQuestion(){
     
     return(
         finished &&(
-        <div className="container">
-            <div className="interview">
-                <div className="question">
-                    <textarea  rows="5" cols="100"  value={question}>{question}</textarea>
-                    <VolumeUpIcon className="voice" fontSize="large" onClick={voiceText}></VolumeUpIcon>
+        <div>
+            <header>
+                <h1><a href="/">Mülakat Profesörü</a></h1>
+            </header>
+            <div className="container">
+                <ArrowBackIosIcon className="arrow-back" fontSize="large" onClick={DenemePage}/>
+                <div className="interview">
+                    <div className="question">
+                        <textarea  rows="5" cols="100"  value={question}>{question}</textarea>
+                        <VolumeUpIcon className="voice" fontSize="large" onClick={voiceText}></VolumeUpIcon>
+                    </div>
+                    <div className="answer">
+                        <textarea  rows="8" cols="100"  placeholder="Please enter your answer here" onChange={(event)=>{setAnswer(event.target.value)}} value={answer}></textarea>
+                        <MicIcon className="mic" fontSize="large" onClick={takeSpeech}></MicIcon>
+                    </div>
+                        <SendIcon className="sendButton" fontSize="large" onClick={takeAnswer} />
                 </div>
-                <div className="answer">
-                    <textarea  rows="8" cols="100"  placeholder="Please enter your answer here" onChange={(event)=>{setAnswer(event.target.value)}} value={answer}></textarea>
-                    <MicIcon className="mic" fontSize="large" onClick={takeSpeech}></MicIcon>
+                <div className="clue">
+                    <FindInPageIcon onMouseOver={openWindow} onMouseOut={closeWindow} style={{color: 'black'}} fontSize="large"/>
+                    <p id="hoverWindow">{clue}</p>
                 </div>
-                    <SendIcon className="sendButton" fontSize="large" onClick={takeAnswer} />
+                <div className="pass">
+                    <p>Pass</p>
+                    <ArrowForwardIcon onClick={takeAnswer} fontSize="large"/>
+                </div>
             </div>
-            <div className="clue">
-                <FindInPageIcon onMouseOver={openWindow} onMouseOut={closeWindow} style={{color: 'black'}} fontSize="large"/>
-                <p id="hoverWindow">{clue}</p>
-            </div>
-
-        </div>)
+        </div>
+        )
     );
 
 }
