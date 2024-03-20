@@ -8,7 +8,6 @@ const ProfileBox = (props) => {
   const modalAcKapa = () => {
     modalAcik===true?setModalAcik(false):setModalAcik(true);
   };
-
   return (
     
     <div>
