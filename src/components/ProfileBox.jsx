@@ -16,8 +16,8 @@ const ProfileBox = (props) => {
     <div>
         {modalAcik && (
           <div className="profile-menu">
-            <button onClick={props.history}>History</button>
-            <button onClick={logout}>Logout</button>
+            <button onClick={props.history}>Geçmiş</button>
+            <button onClick={logout}>Çıkış yap</button>
           </div>
         )}
       </div>
