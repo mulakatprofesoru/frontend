@@ -1,4 +1,5 @@
 import React, { useState ,useEffect } from "react";
+import { useNavigate  ,  useParams } from 'react-router-dom';
 import SendIcon from '@mui/icons-material/Send';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import MicIcon from '@mui/icons-material/Mic';
@@ -9,7 +10,6 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import axios from 'axios';
 
-
 function Interview(){
     const [questionId , setQuestionId]=useState();
     const [question , setQuestion]=useState("Question");
@@ -17,13 +17,18 @@ function Interview(){
     const [answer , setAnswer]=useState(null);
     const [questionAnswer , setData]=useState({questionData:question ,answerData:null});
     const { speak , voices } = useSpeechSynthesis();
+    const navigate = useNavigate();
+    const HomePage = () => {
+        navigate("/");
+    }
 
-
+    const { interviewType } = useParams(); 
+    const formData = new FormData();
     const fetchData = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/questions/random');
+            const response = await axios.get('http://localhost:5000/api/questions/random/'+interviewType);
             if (response.status === 200){
-                setQuestionId(response.data.question_id);
+                setQuestionId(response.data.data.question_id);
                 setQuestion(response.data.data.question);
                 //setClue(response.data.data.clue)
             } else {
@@ -33,23 +38,15 @@ function Interview(){
             console.error('Error:', error);
         }
     };
-
     //GET
     useEffect(() => { fetchData(); } , []);
 
     // POST
     const sendPostRequest = async () => {
         try {
-            const response = await axios.post('http://localhost:5000/api/data', {
-                answerData: answer,
-                questionData: question,
-                questionId:questionId,
-            }, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-    
+            formData.append("answer", answer);
+            formData.append("question_id", questionId);
+            const response = await axios.post('http://localhost:5000/api/users/addTrainingHistory',formData);
             if (response.status === 200) {
                 console.log('Data sent successfully to Flask using POST');
             } else {
@@ -92,24 +89,32 @@ function Interview(){
     }
     
     return(
-        <div className="container">
-            <ArrowBackIosIcon className="arrow-back" fontSize="large"/>
-            <div className="interview">
-                <div className="question">
-                    <textarea  rows="5" cols="100"  value={question}>{question}</textarea>
-                    <VolumeUpIcon className="voice" fontSize="large" onClick={voiceText}></VolumeUpIcon>
+        <div>
+            <header>
+                <h1><a href="/">Mülakat Profesörü</a></h1>
+            </header>
+            <div className="container">
+                <ArrowBackIosIcon className="arrow-back" fontSize="large" onClick={HomePage}/>
+                <div className="interview">
+                    <div className="question">
+                        <textarea  rows="5" cols="100"  value={question}>{question}</textarea>
+                        <VolumeUpIcon className="voice" fontSize="large" onClick={voiceText}></VolumeUpIcon>
+                    </div>
+                    <div className="answer">
+                        <textarea  rows="8" cols="100"  placeholder="Please enter your answer here" onChange={(event)=>{setAnswer(event.target.value)}} value={answer}></textarea>
+                        <MicIcon className="mic" fontSize="large" onClick={takeSpeech}></MicIcon>
+                    </div>
+                        <SendIcon className="sendButton" fontSize="large" onClick={sendPostRequest} />
                 </div>
-                <div className="answer">
-                    <textarea  rows="8" cols="100"  placeholder="Please enter your answer here" onChange={(event)=>{setAnswer(event.target.value)}} value={answer}></textarea>
-                    <MicIcon className="mic" fontSize="large" onClick={takeSpeech}></MicIcon>
+                <div className="clue">
+                    <FindInPageIcon onMouseOver={openWindow} onMouseOut={closeWindow} style={{color: 'black'}} fontSize="large"/>
+                    <p id="hoverWindow">{clue}</p>
                 </div>
-                    <SendIcon className="sendButton" fontSize="large" onClick={sendPostRequest} />
+                <div className="pass">
+                    <p>Pass</p>
+                    <ArrowForwardIcon onClick={fetchData} fontSize="large"/>
+                </div>
             </div>
-            <div className="clue">
-                <FindInPageIcon onMouseOver={openWindow} onMouseOut={closeWindow} style={{color: 'black'}} fontSize="large"/>
-                <p id="hoverWindow">{clue}</p>
-            </div>
-            <ArrowForwardIcon onClick={fetchData} fontSize="large" className="arrow-forward"/>
         </div>
     );
 
