@@ -7,7 +7,7 @@ import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import FindInPageIcon from '@mui/icons-material/FindInPage';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate , useParams } from 'react-router-dom';
 import axios from "axios";
 
 
@@ -23,11 +23,13 @@ function DenemeQuestion(){
     const DenemePage = () => {
         navigate('/deneme');
     }
-
+    const { denemeNumber } = useParams(); 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/questions/random');
+                console.log("deneme Number:"+denemeNumber);
+                const response = await axios.get('http://localhost:5000/api/tests/'+denemeNumber);
+                console.log(response.data);
                 if (response.status === 200){
                     setQuestionId(response.data.question_id);
                     setQuestion(response.data.data.question);

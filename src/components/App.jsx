@@ -12,7 +12,7 @@ export default function App() {
         <Route path="interview/:interviewType" element={<InterviewPage />} />
         <Route path="deneme" element={<DenemePage />} />
         <Route path="history" element={<HistoryPage />} />
-        <Route path="deneme_question" element={<DenemeQuestionPage/>}/>
+        <Route path="deneme_question/:denemeNumber" element={<DenemeQuestionPage/>}/>
       </Routes>
     </Router>
   );
