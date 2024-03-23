@@ -18,12 +18,14 @@ function DenemeQuestion(){
     const [answer ,setAnswer]=useState("");
     const [questionAnswer,setData]=useState([]);
     const { speak , voices } = useSpeechSynthesis();
-    const [finished , setFinished] = useState(true);
+    const [finished , setFinished] = useState(false);
+    const [score , setScore] = useState(0);
     const navigate = useNavigate();
     const DenemePage = () => {
         navigate('/deneme');
     }
     const { denemeNumber } = useParams(); 
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -72,7 +74,7 @@ function DenemeQuestion(){
         setAnswer("");
         if(questionAnswer.length===9){
             sendPostRequest();
-            setFinished(false);
+            setFinished(true);
         }
     }
 
@@ -106,14 +108,17 @@ function DenemeQuestion(){
     }
     
     return(
-        finished &&(
+        
         <div>
             <header>
                 <h1><a href="/">Mülakat Profesörü</a></h1>
             </header>
             <div className="container">
                 <ArrowBackIosIcon className="arrow-back" fontSize="large" onClick={DenemePage}/>
-                <div className="interview">
+                
+                {!finished &&(
+                    <>
+                    <div className="interview">
                     <div className="question">
                         <textarea  rows="5" cols="100"  value={question}>{question}</textarea>
                         <VolumeUpIcon className="voice" fontSize="large" onClick={voiceText}></VolumeUpIcon>
@@ -132,10 +137,20 @@ function DenemeQuestion(){
                     <p>Pass</p>
                     <ArrowForwardIcon onClick={takeAnswer} fontSize="large"/>
                 </div>
+                </>
+                )}
+
+                {finished&&(
+                    <div className="score-window">
+                        <p>{score}</p>
+                        <ArrowForwardIcon fontSize="large" onClick={DenemePage}/>
+
+                    </div>)
+                }
             </div>
         </div>
         )
-    );
+    
 
 }
 

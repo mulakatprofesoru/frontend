@@ -94,14 +94,15 @@ grid-template-rows: 50px 200px 200px;
 grid-template-columns: 300px 300px 300px;
 }
 .container{
-    display: grid;
-    grid-template:100px 400px 400px / 500px 400px 400px;
-    justify-items: center;
-    align-items: center;
+   position: fixed;
+   top: 20%;
+   left: 40%;
+    
 }
 .interview {
-    grid-column-start: 3;
-    grid-row-start: 2;
+    position: fixed;
+    top: 20%;
+    left: 40%;
     width: 400px;
     height: 400px;
     background-color: aliceblue;
@@ -143,10 +144,10 @@ grid-template-columns: 300px 300px 300px;
     left: 43%;
 }
 .clue{
+    position: absolute;
+    top: 375px;
+    left: 10px;
     width: 300px;
-    grid-row-start: 3;
-    grid-column-start: 3;
-    display: flex;
 }
 #hoverWindow{
     display: none;
@@ -183,12 +184,20 @@ grid-template-columns: 300px 300px 300px;
 
 .scrollable-window {  
     width: 600px;
-    position: relative;
+    position: fixed;
     left: 5%;
-    top:20%;
+    top: 15%;
     overflow: auto;
     
-  }
+}
+.scrollable-window1 {  
+    width: 600px;
+    position: fixed;
+    left: 5%;
+    top: 15%;
+    overflow: auto;
+    
+}
 
 .history-container{
     grid-column: 1;
@@ -211,16 +220,32 @@ grid-template-columns: 300px 300px 300px;
     display: none;
     position: fixed;
     border: solid;
-    min-width:500px;
+    border-radius: 7px;
+    border-width: 2px;
+    box-shadow: 0 1px 10px rgb(116, 115, 115);
+    max-width:700px;
     min-height:500px;   
-    top: 10%;
-    left: 50%;
+    top: 20%;
+    left: 40%;
 }
+
+#helper-box p{
+    font-size: larger;
+    max-width: 95%;
+    border: solid;
+    overflow: visible;
+    border-width: 1px;
+    border-radius: 7px;
+    margin: auto;
+    margin-top: 10px; 
+    padding: 3px;
+}
+
 
 .arrow-back{
     position: fixed;
-    top: 12%;
-    left: 1%;
+    top: 90px;
+    left: 20px;
 }
 .pass{
     position: fixed;
@@ -252,4 +277,43 @@ grid-template-columns: 300px 300px 300px;
     position: absolute;
     right: 1%;
     top: 1%;
+}
+
+#question-box{
+    display: none;
+    flex-direction: column;
+    position: fixed;
+    top: 10%;
+    left: 40%;
+}
+
+#question-box  .button {
+    padding: 5px;
+    margin: 5px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 300px;
+    height: 50px;
+}
+
+.score-window{
+    background-color: aliceblue;
+    border: groove;
+    border-radius: 7px;
+    border-color: aliceblue;
+    padding: auto;
+    width: 300px;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 50px;      
+}
+
+.score-window p {
+    margin-bottom: 40px;  
 }
