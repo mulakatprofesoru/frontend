@@ -25,7 +25,7 @@ function DenemeQuestion(){
         navigate('/deneme');
     }
     const { denemeNumber } = useParams(); 
-    let index=1;
+let index=1;
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -46,8 +46,13 @@ function DenemeQuestion(){
     }, [questionAnswer]);
 
     const sendPostRequest = async () => {
+
+        const formData= new FormData();
+
         try {
-            const response = await axios.post('http://localhost:5000/api/users/addTestHistory' , questionAnswer);
+            formData.append('test_id', denemeNumber)
+            formData.append('question_answer', JSON.stringify(questionAnswer))
+            const response = await axios.post('http://localhost:5000/api/users/addTestHistory' , formData);
 
 
             if (response.ok) {
@@ -62,7 +67,7 @@ function DenemeQuestion(){
 
     function takeAnswer(){
         setData(prevData => {
-            return [...prevData, {questionId:questionId, question: question, answer: answer }];
+            return [...prevData, {question_id: questionId, answer: answer}];
           });
         setQuestion("");
         setAnswer("");
