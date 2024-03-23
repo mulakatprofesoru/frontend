@@ -25,17 +25,16 @@ function DenemeQuestion(){
         navigate('/deneme');
     }
     const { denemeNumber } = useParams(); 
-
+    let index=1;
     useEffect(() => {
         const fetchData = async () => {
             try {
-                console.log("deneme Number:"+denemeNumber);
                 const response = await axios.get('http://localhost:5000/api/tests/'+denemeNumber);
-                console.log(response.data);
+                //console.log(response.data);
                 if (response.status === 200){
-                    setQuestionId(response.data.question_id);
-                    setQuestion(response.data.data.question);
-                    //setClue(response.data.data.clue)
+                    // setQuestionId(response.data.question_id);
+                    // setQuestion(response.data.data.question);
+                    // //setClue(response.data.data.clue)
                 } else {
                     console.error('Failed to fetch data from Flask using GET');
                 }
@@ -48,13 +47,8 @@ function DenemeQuestion(){
 
     const sendPostRequest = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/data', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(questionAnswer),
-            });
+            const response = await axios.post('http://localhost:5000/api/users/addTestHistory' , questionAnswer);
+
 
             if (response.ok) {
                 console.log('Data sent successfully to Flask using POST');
@@ -68,7 +62,7 @@ function DenemeQuestion(){
 
     function takeAnswer(){
         setData(prevData => {
-            return [...prevData, { question: question, answer: answer }];
+            return [...prevData, {questionId:questionId, question: question, answer: answer }];
           });
         setQuestion("");
         setAnswer("");

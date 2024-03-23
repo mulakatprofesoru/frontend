@@ -1,24 +1,25 @@
 import React, { useState , useEffect } from "react";
 import { useNavigate} from 'react-router-dom';
 import HistoryHelperBox from "./HistoryHelperBox";
-import { useAuth0 } from "@auth0/auth0-react";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import axios from "axios";
 
 function History(){
   const [modal,setModal] = useState(false);
-  const [notes, setNotes] = useState([]);
+  const [questions, setQuestions] = useState([]);
+  const [testQuestions, setTestQuestions] = useState(["" , "","" , "","" , "","" , "","" , ""]);
+  const [tests, setTests] = useState(["" , "" ,""]);
   const [history , setHistory] = useState([]); 
-  const [HistoryPressed, setHistoryPressed] = useState(true);
-  const [DenemePressed, setDenemePressed] = useState(false);
+  const [historyPressed, setHistoryPressed] = useState(true);
+  const [testPressed, setTestPressed] = useState(false);
   const [currentId, setCurrentId] = useState(0);
+  const [currentHistoryPage, setCurrentHistoryPage] = useState("Training");
   const [currentHistory, setCurrentHistory]=useState({
     question : "",
     userAnswer : "",
     answer : "",
     score : ""});
   
-  let index=0;
   
   const getCurrentId = (event) => {
     setCurrentHistory({
@@ -32,12 +33,16 @@ function History(){
 
   const handleHistoryButtonClick = () => {
     setHistoryPressed(true);
-    setDenemePressed(false); 
+    setTestPressed(false);
+    setModal(false); 
+    setCurrentHistoryPage("Training");
   };
 
-  const handleDenemeButtonClick = () => {
-    setDenemePressed(true);
+  const handleTestButtonClick = () => {
+    setTestPressed(true);
     setHistoryPressed(false);
+    setModal(false);
+    setCurrentHistoryPage("Test");
   };
 
   function openModal(){
@@ -52,16 +57,17 @@ function History(){
   }
 
   const navigate = useNavigate();
+  
   const HomePage = () => {
       navigate("/");
   }
 
-  async function getHistory(){
+  async function getTrainHistory(){
     try {
       var response = await axios.get("http://localhost:5000/api/users/getTrainingHistory");
       if(response.status === 200){
           setHistory(response.data.data);
-          setNotes(()=>{
+          setQuestions(()=>{
             let data=[]
             for (let i = 0; i < response.data.data.length; i++) {
               data[i]="";
@@ -74,36 +80,97 @@ function History(){
     }
   }
 
-  useEffect(()=> {getHistory()} ,[]);
-    
+
+  async function getTestHistory(){
+    try {
+      var response = await axios.get("http://localhost:5000/api/users/getTestHistory");
+      if(response.status === 200){
+        console.log(response.data.data);
+          // setHistory(response.data.data);
+          // setQuestions(()=>{
+          //   let data=[]
+          //   for (let i = 0; i < response.data.data.length; i++) {
+          //     data[i]="";
+          //   }
+          //   return data;
+          // });
+      }
+    } catch (error) {
+      console.error('Error:', error); 
+    }
+  }
+
+  useEffect(()=> {getTrainHistory()} ,[]);
+
+
+  function handleTestQuestion(event){
+    setTestQuestions(["","",""]);
+    //setTestQuestions(tests[event.target.id]);
+    var box= document.getElementById("question-box");
+    if(modal){
+      box.style.display = "none";
+    }
+    else{
+      box.style.display = "flex";
+    }
+    setModal(!modal);
+  }
+
   return(
     <div>
       <header>
         <h1><a href="/">Mülakat Profesörü</a></h1>
         <div className="history-buttons">
-          <button className={HistoryPressed ? 'button pressed' : 'button'}
+          <button className={historyPressed ? 'button pressed' : 'button'}
             onClick={handleHistoryButtonClick} >Eğitim Geçmişi</button>
-          <button className={DenemePressed ? 'button pressed' : 'button'}
-            onClick={handleDenemeButtonClick}>Deneme Geçmişi</button>
-            
+          <button className={testPressed ? 'button pressed' : 'button'}
+            onClick={handleTestButtonClick}>Deneme Geçmişi</button>
         </div>
       </header>
-      <ArrowBackIosIcon className="arrow-back" fontSize="large" onClick={HomePage}/>
 
-        <HistoryHelperBox
-          question={currentHistory.question}
-          userAnswer={currentHistory.userAnswer}
-          answer={currentHistory.answer}
-          skor={currentHistory.score}
-        />
-        <div className="scrollable-window">
-          {notes.map((note , index) => {
-            return(
-            <div key={index} className="history-container">
-              <button onClick={getCurrentId} id={index++}>Question</button>
-            </div>);
-          })}
-        </div>
+      <ArrowBackIosIcon className="arrow-back" fontSize="large" onClick={HomePage}/>
+      
+      {
+        currentHistoryPage === "Training" ? (
+          <>
+            <HistoryHelperBox
+              question={currentHistory.question}
+              userAnswer={currentHistory.userAnswer}
+              answer={currentHistory.answer}
+              skor={currentHistory.score}
+            />
+            <div className="scrollable-window">
+              {questions.map((note, index) => {
+                return (
+                  <div key={index} className="history-container">
+                    <button style={{ fontSize: "larger" }} onClick={getCurrentId} id={index++}>
+                      Soru
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          </>
+          ) : 
+          (<>
+            <div className="scrollable-window1">
+              {tests.map((test , index) => {
+                return(
+                <div key={index} className="history-container">
+                  <button style={{fontSize:"larger"}} onClick={handleTestQuestion} id={index}>Deneme {index}</button>
+                </div>);
+              })}
+            </div>
+
+              <div id="question-box">
+                {testQuestions.map((note , index) => {
+                  return(
+                    <button className="button" onClick={getCurrentId} id={index}>Soru {index+1}</button>
+                  );
+                })}
+              </div>
+          </>)
+      }
     </div>
   );
 }
