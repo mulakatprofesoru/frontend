@@ -119,6 +119,7 @@ grid-template-columns: 300px 300px 300px;
 }
 .interview textarea {
     width: 95%;
+    padding: 3px;
     background-color: aliceblue;
     border: solid;
     outline: none;
@@ -316,4 +317,42 @@ grid-template-columns: 300px 300px 300px;
 
 .score-window p {
     margin-bottom: 40px;  
+}
+
+.review-window{
+    position: fixed;
+    top: 20%;
+    left: 35%;
+    border-radius: 7px;
+    box-shadow: 0 1px 5px rgb(138, 137, 137);
+    background-color: aliceblue;
+    height: 600px;
+    width: 600px;
+}
+.review-box1{
+    border-bottom: groove;
+}
+
+.review-box1 p{
+    margin: 5px;
+    margin-top: 20px;
+    padding: 5px;
+    font-size: larger;
+}
+
+.question-label{
+    font-size: larger;
+    font-weight: bold;
+}
+
+.review-box2 p{
+    margin: 5px;
+    margin-top: 10px;
+    padding: 5px;
+    font-size: larger;
+}
+.close-button{
+    position: absolute;
+    left: 95%;
+    top: 1%;
 }

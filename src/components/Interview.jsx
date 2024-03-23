@@ -8,19 +8,22 @@ import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import FindInPageIcon from '@mui/icons-material/FindInPage';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
 
 function Interview(){
     const [questionId , setQuestionId]=useState();
     const [question , setQuestion]=useState("Question");
     const [clue , setClue]=useState("There is a clue for question");
-    const [answer , setAnswer]=useState(null);
+    const [answer , setAnswer]=useState("null bir değerdir ve bu değper iel jerkes ç.ok füzel bir şekilde .çalışabilir istresen sende çalışabişabilirsin");
     const [questionAnswer , setData]=useState({questionData:question ,answerData:null});
     const { speak , voices } = useSpeechSynthesis();
+    const [review , setReview] = useState(true);
     const navigate = useNavigate();
     const HomePage = () => {
         navigate("/");
     }
+
 
     const { interviewType } = useParams(); 
     const formData = new FormData();
@@ -30,6 +33,7 @@ function Interview(){
             if (response.status === 200){
                 setQuestionId(response.data.data.question_id);
                 setQuestion(response.data.data.question);
+                //setReview(false);
                 //setClue(response.data.data.clue)
             } else {
                 console.error('Failed to fetch data from Flask using GET');
@@ -37,12 +41,13 @@ function Interview(){
         } catch (error) {
             console.error('Error:', error);
         }
+        setReview(false);
     };
     //GET
     useEffect(() => { fetchData(); } , []);
 
     // POST
-    const sendPostRequest = async () => {
+    const sendPostRequest = async () => { 
         try {
             formData.append("answer", answer);
             formData.append("question_id", questionId);
@@ -55,8 +60,7 @@ function Interview(){
         } catch (error) {
             console.error('Error:', error);
         }
-        setAnswer("");
-        fetchData();
+        setReview(true);
     };
 
     const {
@@ -87,7 +91,7 @@ function Interview(){
         var hoverWindow = document.getElementById("hoverWindow");
         hoverWindow.style.display = "none";
     }
-    
+
     return(
         <div>
             <header>
@@ -115,6 +119,21 @@ function Interview(){
                     <ArrowForwardIcon onClick={fetchData} fontSize="large"/>
                 </div>
             </div>
+            {
+                review &&(
+                    <div className="review-window">
+                        <CloseIcon className="close-button" onClick={fetchData}/>
+                        <div className="review-box1">
+                        <p><span className="question-label">Q:</span> {question}</p>
+                        <p><span className="question-label">A:</span> {answer}</p>
+                        </div>
+                        <div className="review-box2">
+                            <p><span className="question-label">S:</span> {5}</p>
+                            <p><span className="question-label">F:</span> </p>
+                        </div>
+                    </div>
+                )
+            }
         </div>
     );
 
