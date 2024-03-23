@@ -14,26 +14,27 @@ import axios from "axios";
 function DenemeQuestion(){
     const [questionId , setQuestionId]=useState();
     const [question,setQuestion]=useState("Question");
+    const [questions,setQuestions]=useState(null);
     const [clue,setClue]=useState("There is a clue for question");
     const [answer ,setAnswer]=useState("");
     const [questionAnswer,setData]=useState([]);
     const { speak , voices } = useSpeechSynthesis();
     const [finished , setFinished] = useState(false);
-    const [score , setScore] = useState(0);
+    const [score , setScore] = useState();
     const navigate = useNavigate();
     const DenemePage = () => {
         navigate('/deneme');
     }
     const { denemeNumber } = useParams(); 
-let index=1;
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await axios.get('http://localhost:5000/api/tests/'+denemeNumber);
-                //console.log(response.data);
                 if (response.status === 200){
-                    // setQuestionId(response.data.question_id);
-                    // setQuestion(response.data.data.question);
+                    setQuestions(response.data.data);
+                    setQuestionId(response.data.data[0].questionId);
+                    setQuestion(response.data.data[0].question);
                     // //setClue(response.data.data.clue)
                 } else {
                     console.error('Failed to fetch data from Flask using GET');
@@ -43,7 +44,7 @@ let index=1;
             }
         };
             fetchData();
-    }, [questionAnswer]);
+    }, [denemeNumber]);
 
     const sendPostRequest = async () => {
 
@@ -54,8 +55,8 @@ let index=1;
             formData.append('question_answer', JSON.stringify(questionAnswer))
             const response = await axios.post('http://localhost:5000/api/users/addTestHistory' , formData);
 
-
-            if (response.ok) {
+            if (response.statusText ==="OK") {
+                setScore(response.data.score);
                 console.log('Data sent successfully to Flask using POST');
             } else {
                 console.error('Failed to send data to Flask using POST');
@@ -66,20 +67,20 @@ let index=1;
     };
 
     function takeAnswer(){
-        setData(prevData => {
-            return [...prevData, {question_id: questionId, answer: answer}];
-          });
-        setQuestion("");
-        setAnswer("");
-        if(questionAnswer.length===9){
+        if(questionAnswer.length===10){
             sendPostRequest();
             setFinished(true);
+            
+        }else{
+            setData(prevData => {return [...prevData, {question_id: questionId, answer: answer}];});
+            setQuestion(questions[questionAnswer.length].question);
+            setQuestionId(questions[questionAnswer.length].questionId)
+            setAnswer("");
         }
     }
 
     const {
         transcript,
-        listening,
         browserSupportsSpeechRecognition
         } = useSpeechRecognition();
     
