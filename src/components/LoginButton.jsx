@@ -16,8 +16,8 @@ const LoginButton = (props) => {
       formData.append('email', user.email);
       formData.append('password', user.email);
       const response = await axios.post('http://localhost:5000/api/users/addUser', formData);
-      if (response.ok) {
-          console.log('Data sent successfully to Flask using POST');
+      if (response.status ===200) {
+          console.log('Sign up data sent successfully');
       } else {
           console.error('Failed to send data to Flask using POST');
       }
@@ -28,8 +28,8 @@ const LoginButton = (props) => {
       formData.append('email', user.email);
       formData.append('password', user.email);
       const response = await axios.post('http://localhost:5000/api/users/login', formData);
-      if (response.ok) {
-          console.log('Data sent successfully to Flask using POST');
+      if (response.status ===200) {
+          console.log('Login data sent successfully');
       } else {
           console.error('Failed to send data to Flask using POST');
       }

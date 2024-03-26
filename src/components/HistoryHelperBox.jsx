@@ -1,14 +1,13 @@
 import React from "react";
-import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 
 function HistoryHelperBox (props){
 
     return(
             <div id="helper-box">
-                <p>{props.question}</p>
-                <p>{props.userAnswer}</p>
-                <p>{props.answer}</p>
-                <p>{props.skor}</p>
+                <p><span className="question-label">Q: </span>{props.question}</p>
+                <p><span className="question-label">UA: </span>{props.userAnswer}</p>
+                <p><span className="question-label">A: </span>{props.answer}</p>
+                <p><span className="question-label">S: </span>{props.skor}</p>
             </div>
     );
 }

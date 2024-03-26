@@ -20,13 +20,15 @@ function DenemeQuestion(){
     const [questionAnswer,setData]=useState([]);
     const { speak , voices } = useSpeechSynthesis();
     const [finished , setFinished] = useState(false);
-    const [score , setScore] = useState();
+    const [score , setScore] = useState(0);
+    const [index , setIndex] = useState(1);
     const navigate = useNavigate();
     const DenemePage = () => {
         navigate('/deneme');
     }
     const { denemeNumber } = useParams(); 
-
+    const formDataForHint = new FormData();
+    
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -35,7 +37,13 @@ function DenemeQuestion(){
                     setQuestions(response.data.data);
                     setQuestionId(response.data.data[0].questionId);
                     setQuestion(response.data.data[0].question);
-                    // //setClue(response.data.data.clue)
+                    formDataForHint.append("question",response.data.data[0].question);
+                    // const responseForHint=await axios.post("http://localhost:5000/api/chatgpt/hint" , formDataForHint)
+                    // if(responseForHint.status===200){
+                    //     setClue(responseForHint.data.message)
+                    // }else{
+                    //     console.log("Failed to fetcg hint");
+                    // }
                 } else {
                     console.error('Failed to fetch data from Flask using GET');
                 }
@@ -44,15 +52,15 @@ function DenemeQuestion(){
             }
         };
             fetchData();
-    }, [denemeNumber]);
+    }, []);
 
     const sendPostRequest = async () => {
-
         const formData= new FormData();
 
         try {
-            formData.append('test_id', denemeNumber)
-            formData.append('question_answer', JSON.stringify(questionAnswer))
+            formData.append('test_id', denemeNumber);
+            formData.append('question_answer', JSON.stringify(questionAnswer));
+            console.log(formData.get('question_answer'));
             const response = await axios.post('http://localhost:5000/api/users/addTestHistory' , formData);
 
             if (response.statusText ==="OK") {
@@ -67,15 +75,21 @@ function DenemeQuestion(){
     };
 
     function takeAnswer(){
-        if(questionAnswer.length===10){
-            sendPostRequest();
-            setFinished(true);
-            
-        }else{
+        if(index<11){     
             setData(prevData => {return [...prevData, {question_id: questionId, answer: answer}];});
-            setQuestion(questions[questionAnswer.length].question);
-            setQuestionId(questions[questionAnswer.length].questionId)
             setAnswer("");
+            if(index<10){
+                setQuestion(questions[index].question);
+                setQuestionId(questions[index].questionId);
+            }else{
+                let temp=questionAnswer;
+                temp[9]={question_id: questionId, answer: answer};
+                console.log(temp);
+                setData(temp);
+                sendPostRequest();
+                setFinished(true);
+            }
+            setIndex(prevData =>{return(prevData+1);});
         }
     }
 
@@ -142,7 +156,8 @@ function DenemeQuestion(){
 
                 {finished&&(
                     <div className="score-window">
-                        <p>{score}</p>
+                        <p style={{margin: "auto",marginTop: "5px" ,marginBottom:"10px",}}>Deneme Puanı</p>
+                        <p style={{marginTop: "10px", marginBottom:"20px"}}>{score}</p>
                         <ArrowForwardIcon fontSize="large" onClick={DenemePage}/>
 
                     </div>)

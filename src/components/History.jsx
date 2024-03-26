@@ -3,6 +3,7 @@ import { useNavigate} from 'react-router-dom';
 import HistoryHelperBox from "./HistoryHelperBox";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import axios from "axios";
+import { Mode } from "@mui/icons-material";
 
 function History(){
   const [modal,setModal] = useState(false);
@@ -13,6 +14,7 @@ function History(){
   const [historyPressed, setHistoryPressed] = useState(true);
   const [testPressed, setTestPressed] = useState(false);
   const [currentId, setCurrentId] = useState(0);
+  const [currentHistoryId, setCurrentHistorytId] = useState(-1);
   const [currentHistoryPage, setCurrentHistoryPage] = useState("Training");
   const [currentHistory, setCurrentHistory]=useState({
     question : "",
@@ -28,7 +30,7 @@ function History(){
       answer: history[event.target.id].correct_answer,
       score: history[event.target.id].user_id
     });
-    openModal();  
+    openModal(event.target.id);  
   };
 
   const handleHistoryButtonClick = () => {
@@ -45,20 +47,34 @@ function History(){
     setCurrentHistoryPage("Test");
   };
 
-  function openModal(){
+  function openModal(id){
     var box= document.getElementById("helper-box");
-    if(modal){
-      box.style.display = "none";
+    if(currentHistoryId ===-1){
+      setCurrentHistorytId(id);
+      box.style.display = "block";
+    }else if(id === currentHistoryId ){
+      setCurrentHistorytId(id);
+      if(!modal){
+        box.style.display = "none";
+      }
+      else{
+        box.style.display = "block";
+      }
+      setModal(!modal);
     }
-    else{
+    else{    
+      if(modal){
+        setModal(false);
+      }
+      setCurrentHistorytId(id);
       box.style.display = "block";
     }
-    setModal(!modal);
   }
 
   const navigate = useNavigate();
   
   const HomePage = () => {
+      setCurrentHistoryPage("Training");
       navigate("/");
   }
 
@@ -129,7 +145,12 @@ function History(){
       </header>
 
       <ArrowBackIosIcon className="arrow-back" fontSize="large" onClick={HomePage}/>
-      
+      <HistoryHelperBox
+              question={currentHistory.question}
+              userAnswer={currentHistory.userAnswer}
+              answer={currentHistory.answer}
+              skor={currentHistory.score}
+            />
       {
         currentHistoryPage === "Training" ? (
           <>

@@ -14,8 +14,11 @@ import axios from 'axios';
 function Interview(){
     const [questionId , setQuestionId]=useState();
     const [question , setQuestion]=useState("Question");
+    const [feedback , setFeedback]=useState("Feedback");
+    const [score , setScore]=useState(0);
+    const [label , setLabel]=useState("Soruyu Atla");
     const [clue , setClue]=useState("There is a clue for question");
-    const [answer , setAnswer]=useState("null bir değerdir ve bu değper iel jerkes ç.ok füzel bir şekilde .çalışabilir istresen sende çalışabişabilirsin");
+    const [answer , setAnswer]=useState("");
     const [questionAnswer , setData]=useState({questionData:question ,answerData:null});
     const { speak , voices } = useSpeechSynthesis();
     const [review , setReview] = useState(true);
@@ -27,20 +30,29 @@ function Interview(){
 
     const { interviewType } = useParams(); 
     const formData = new FormData();
+    const formDataForHint = new FormData();
     const fetchData = async () => {
+        setLabel("Soruyu Atla");
         try {
             const response = await axios.get('http://localhost:5000/api/questions/random/'+interviewType);
             if (response.status === 200){
                 setQuestionId(response.data.data.question_id);
                 setQuestion(response.data.data.question);
-                //setReview(false);
-                //setClue(response.data.data.clue)
+                formDataForHint.append("question",response.data.data.question);
+                const responseForHint=await axios.post("http://localhost:5000/api/chatgpt/hint" , formDataForHint)
+                if(responseForHint.status===200){
+                    setClue(responseForHint.data.message)
+                }else{
+                    console.log("Failed to fetch hint");
+                }
+                setReview(true);
             } else {
-                console.error('Failed to fetch data from Flask using GET');
+                console.error('Failed to fetch hint from Flask using GET');
             }
         } catch (error) {
             console.error('Error:', error);
         }
+        setAnswer("");
         setReview(false);
     };
     //GET
@@ -49,11 +61,13 @@ function Interview(){
     // POST
     const sendPostRequest = async () => { 
         try {
+            setLabel("Sonraki Soru")
             formData.append("answer", answer);
             formData.append("question_id", questionId);
             const response = await axios.post('http://localhost:5000/api/users/addTrainingHistory',formData);
             if (response.status === 200) {
-                console.log('Data sent successfully to Flask using POST');
+                setFeedback(response.data.data.feedback);
+                setScore(response.data.data.score);
             } else {
                 console.error('Failed to send data to Flask using POST');
             }
@@ -115,8 +129,8 @@ function Interview(){
                     <p id="hoverWindow">{clue}</p>
                 </div>
                 <div className="pass">
-                    <p>Pass</p>
-                    <ArrowForwardIcon onClick={fetchData} fontSize="large"/>
+                    <p>{label}</p>
+                    <ArrowForwardIcon onClick={fetchData} fontSize="large"/>    
                 </div>
             </div>
             {
@@ -128,8 +142,8 @@ function Interview(){
                         <p><span className="question-label">A:</span> {answer}</p>
                         </div>
                         <div className="review-box2">
-                            <p><span className="question-label">S:</span> {5}</p>
-                            <p><span className="question-label">F:</span> </p>
+                            <p><span className="question-label">S:</span> {score}</p>
+                            <p><span className="question-label">F:</span> {feedback}</p>
                         </div>
                     </div>
                 )
