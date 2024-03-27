@@ -9,7 +9,7 @@ function History(){
   const [modal,setModal] = useState(false);
   const [questions, setQuestions] = useState([]);
   const [testQuestions, setTestQuestions] = useState(["" , "","" , "","" , "","" , "","" , ""]);
-  const [tests, setTests] = useState(["" , "" ,""]);
+  const [tests, setTests] = useState([]);
   const [history , setHistory] = useState([]); 
   const [historyPressed, setHistoryPressed] = useState(true);
   const [testPressed, setTestPressed] = useState(false);
@@ -22,7 +22,6 @@ function History(){
     answer : "",
     score : ""});
   
-  
   const getCurrentId = (event) => {
     setCurrentHistory({
       question: history[event.target.id].question,
@@ -33,19 +32,36 @@ function History(){
     openModal(event.target.id);  
   };
 
+  const getCurrentIdForTest = (event , data) => {
+    setCurrentHistory({
+      question: data.question,
+      userAnswer : data.user_answer,
+      answer: data.correct_answer,
+      score: "0"
+    });
+    openModal(event.target.id);  
+  };
+
   const handleHistoryButtonClick = () => {
     setHistoryPressed(true);
     setTestPressed(false);
-    setModal(false); 
+    closeModal();
     setCurrentHistoryPage("Training");
   };
 
   const handleTestButtonClick = () => {
     setTestPressed(true);
     setHistoryPressed(false);
-    setModal(false);
+    closeModal();
     setCurrentHistoryPage("Test");
   };
+
+  function closeModal(){
+    var box= document.getElementById("helper-box");
+    box.style.display = "none";
+    setModal(false);
+    setCurrentHistorytId(-1);
+  }
 
   function openModal(id){
     var box= document.getElementById("helper-box");
@@ -100,28 +116,22 @@ function History(){
   async function getTestHistory(){
     try {
       var response = await axios.get("http://localhost:5000/api/users/getTestHistory");
-      if(response.status === 200){
+      if(response.status === 200){ 
         console.log(response.data.data);
-          // setHistory(response.data.data);
-          // setQuestions(()=>{
-          //   let data=[]
-          //   for (let i = 0; i < response.data.data.length; i++) {
-          //     data[i]="";
-          //   }
-          //   return data;
-          // });
+        response.data.data.forEach(element => {
+            setTests(prevValue =>{return [...prevValue,element]});
+        });
       }
     } catch (error) {
       console.error('Error:', error); 
     }
   }
 
-  useEffect(()=> {getTrainHistory()} ,[]);
+  useEffect(()=> {getTrainHistory();getTestHistory();} ,[]);
 
 
-  function handleTestQuestion(event){
-    setTestQuestions(["","",""]);
-    //setTestQuestions(tests[event.target.id]);
+  function handleTestQuestion(event,test){
+    setTestQuestions(test.questions);
     var box= document.getElementById("question-box");
     if(modal){
       box.style.display = "none";
@@ -150,16 +160,11 @@ function History(){
               userAnswer={currentHistory.userAnswer}
               answer={currentHistory.answer}
               skor={currentHistory.score}
+              open={currentHistoryPage==="Training"? true:false}
             />
       {
         currentHistoryPage === "Training" ? (
           <>
-            <HistoryHelperBox
-              question={currentHistory.question}
-              userAnswer={currentHistory.userAnswer}
-              answer={currentHistory.answer}
-              skor={currentHistory.score}
-            />
             <div className="scrollable-window">
               {questions.map((note, index) => {
                 return (
@@ -178,15 +183,15 @@ function History(){
               {tests.map((test , index) => {
                 return(
                 <div key={index} className="history-container">
-                  <button style={{fontSize:"larger"}} onClick={handleTestQuestion} id={index}>Deneme {index}</button>
+                  <button style={{fontSize:"larger"}} onClick={(event) => handleTestQuestion(event, test)}  id={index}>Deneme {index}</button>
                 </div>);
               })}
             </div>
 
               <div id="question-box">
-                {testQuestions.map((note , index) => {
+                {testQuestions.map((data , index) => {
                   return(
-                    <button className="button" onClick={getCurrentId} id={index}>Soru {index+1}</button>
+                    <button className="button" onClick={(event) =>{getCurrentIdForTest(event,data)}} id={index}>Soru {index+1}</button>
                   );
                 })}
               </div>

@@ -21,7 +21,7 @@ function Interview(){
     const [answer , setAnswer]=useState("");
     const [questionAnswer , setData]=useState({questionData:question ,answerData:null});
     const { speak , voices } = useSpeechSynthesis();
-    const [review , setReview] = useState(true);
+    const [review , setReview] = useState(false);
     const navigate = useNavigate();
     const HomePage = () => {
         navigate("/");
