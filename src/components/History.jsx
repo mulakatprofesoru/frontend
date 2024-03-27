@@ -3,7 +3,6 @@ import { useNavigate} from 'react-router-dom';
 import HistoryHelperBox from "./HistoryHelperBox";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import axios from "axios";
-import { Mode } from "@mui/icons-material";
 
 function History(){
   const [modal,setModal] = useState(false);
@@ -15,6 +14,7 @@ function History(){
   const [testPressed, setTestPressed] = useState(false);
   const [currentId, setCurrentId] = useState(0);
   const [currentHistoryId, setCurrentHistorytId] = useState(-1);
+  const [currentHistoryIdForQuestionBox, setCurrentHistorytIdForQuestionBox] = useState(-1);
   const [currentHistoryPage, setCurrentHistoryPage] = useState("Training");
   const [currentHistory, setCurrentHistory]=useState({
     question : "",
@@ -133,13 +133,28 @@ function History(){
   function handleTestQuestion(event,test){
     setTestQuestions(test.questions);
     var box= document.getElementById("question-box");
-    if(modal){
-      box.style.display = "none";
-    }
-    else{
+    if(currentHistoryIdForQuestionBox ===-1){
+      setCurrentHistorytIdForQuestionBox(event.target.id);
       box.style.display = "flex";
+    }else if(event.target.id === currentHistoryIdForQuestionBox ){
+      setCurrentHistorytIdForQuestionBox(event.target.id);
+      if(!modal){
+        box.style.display = "none";
+        closeModal();
+      }
+      else{
+        box.style.display = "flex";
+      }
+      setModal(!modal);
     }
-    setModal(!modal);
+    else{    
+      if(modal){
+        setModal(false);
+      }
+      setCurrentHistorytIdForQuestionBox(event.target.id);
+      box.style.display = "flex";
+      closeModal();
+    }
   }
 
   return(
