@@ -9,10 +9,12 @@ import FindInPageIcon from '@mui/icons-material/FindInPage';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CloseIcon from '@mui/icons-material/Close';
+import { SyncLoader } from "react-spinners";
 import axios from 'axios';
 
 function Interview(){
     const [questionId , setQuestionId]=useState();
+    const [loading, setLoading] = useState(false);
     const [question , setQuestion]=useState("Question");
     const [feedback , setFeedback]=useState("Feedback");
     const [score , setScore]=useState(0);
@@ -59,6 +61,7 @@ function Interview(){
 
     // POST
     const sendPostRequest = async () => { 
+        setLoading(true);
         try {
             setLabel("Sonraki Soru")
             formData.append("answer", answer);
@@ -68,6 +71,7 @@ function Interview(){
                 console.log(response.data);
                 setFeedback(response.data.data.feedback);
                 setScore(response.data.data.score);
+                setLoading(false);
             } else {
                 console.error('Failed to send data to Flask using POST');
             }
@@ -111,28 +115,40 @@ function Interview(){
             <header>
                 <h1><a href="/">Mülakat Profesörü</a></h1>
             </header>
-            <div className="container">
-                <ArrowBackIosIcon className="arrow-back" fontSize="large" onClick={HomePage}/>
-                <div className="interview">
-                    <div className="question">
-                        <textarea  rows="5" cols="100"  value={question}>{question}</textarea>
-                        <VolumeUpIcon className="voice" fontSize="large" onClick={voiceText}></VolumeUpIcon>
+            { !loading && 
+                (
+                    <div className="container">
+                        <ArrowBackIosIcon className="arrow-back" fontSize="large" onClick={HomePage}/>
+                        <div className="interview">
+                            <div className="question">
+                                <textarea  rows="5" cols="100"  value={question}>{question}</textarea>
+                                <VolumeUpIcon className="voice" fontSize="large" onClick={voiceText}></VolumeUpIcon>
+                            </div>
+                            <div className="answer">
+                                <textarea  rows="8" cols="100"  placeholder="Please enter your answer here" onChange={(event)=>{setAnswer(event.target.value)}} value={answer}></textarea>
+                                <MicIcon className="mic" fontSize="large" onClick={takeSpeech}></MicIcon>
+                            </div>
+                                <SendIcon className="sendButton" fontSize="large" onClick={sendPostRequest} />
+                        </div>
+                        <div className="clue">
+                            <FindInPageIcon onMouseOver={openWindow} onMouseOut={closeWindow} style={{color: 'black'}} fontSize="large"/>
+                            <p id="hoverWindow">{clue}</p>
+                        </div>
+                        <div className="pass">
+                            <p>{label}</p>
+                            <ArrowForwardIcon onClick={fetchData} fontSize="large"/>    
+                        </div>
                     </div>
-                    <div className="answer">
-                        <textarea  rows="8" cols="100"  placeholder="Please enter your answer here" onChange={(event)=>{setAnswer(event.target.value)}} value={answer}></textarea>
-                        <MicIcon className="mic" fontSize="large" onClick={takeSpeech}></MicIcon>
-                    </div>
-                        <SendIcon className="sendButton" fontSize="large" onClick={sendPostRequest} />
+                )
+            }
+            {loading &&(
+                <div className="loading">
+                    <SyncLoader
+                        size={20}
+                    />
+                    <p>Yükleniyor...</p>
                 </div>
-                <div className="clue">
-                    <FindInPageIcon onMouseOver={openWindow} onMouseOut={closeWindow} style={{color: 'black'}} fontSize="large"/>
-                    <p id="hoverWindow">{clue}</p>
-                </div>
-                <div className="pass">
-                    <p>{label}</p>
-                    <ArrowForwardIcon onClick={fetchData} fontSize="large"/>    
-                </div>
-            </div>
+                )}
             {
                 review &&(
                     <div className="review-window">
