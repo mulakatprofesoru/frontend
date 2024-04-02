@@ -6,13 +6,13 @@ import axios from "axios";
 
 function History(){
   const [modal,setModal] = useState(false);
+  const [testScore,setTestScore] = useState(0);
   const [questions, setQuestions] = useState([]);
   const [testQuestions, setTestQuestions] = useState(["" , "","" , "","" , "","" , "","" , ""]);
   const [tests, setTests] = useState([]);
   const [history , setHistory] = useState([]); 
   const [historyPressed, setHistoryPressed] = useState(true);
   const [testPressed, setTestPressed] = useState(false);
-  const [currentId, setCurrentId] = useState(0);
   const [currentHistoryId, setCurrentHistorytId] = useState(-1);
   const [currentHistoryIdForQuestionBox, setCurrentHistorytIdForQuestionBox] = useState(-1);
   const [currentHistoryPage, setCurrentHistoryPage] = useState("Training");
@@ -46,6 +46,7 @@ function History(){
     setHistoryPressed(true);
     setTestPressed(false);
     closeModal();
+    setCurrentHistorytIdForQuestionBox(-1);
     setCurrentHistoryPage("Training");
   };
 
@@ -61,7 +62,6 @@ function History(){
     box.style.display = "none";
     setModal(false);
     setCurrentHistorytId(-1);
-    setCurrentHistorytIdForQuestionBox(-1);
   }
 
   function openModal(id){
@@ -133,12 +133,12 @@ function History(){
 
   function handleTestQuestion(event,test){
     setTestQuestions(test.questions);
+    setTestScore(test.score);
     var box= document.getElementById("question-box");
     if(currentHistoryIdForQuestionBox ===-1){
       setCurrentHistorytIdForQuestionBox(event.target.id);
       box.style.display = "flex";
     }else if(event.target.id === currentHistoryIdForQuestionBox ){
-      setCurrentHistorytIdForQuestionBox(event.target.id);
       if(!modal){
         box.style.display = "none";
         closeModal();
@@ -210,6 +210,8 @@ function History(){
                     <button className="button" onClick={(event) =>{getCurrentIdForTest(event,data)}} id={index}>Soru {index+1}</button>
                   );
                 })}
+                <button className="button" >Score: {testScore}</button>
+                
               </div>
           </>)
       }
