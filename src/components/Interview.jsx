@@ -33,27 +33,26 @@ function Interview(){
     const formDataForHint = new FormData();
     const fetchData = async () => {
         setLabel("Soruyu Atla");
+        setReview(false);
+        setAnswer("");
         try {
             const response = await axios.get('http://localhost:5000/api/questions/random/'+interviewType);
             if (response.status === 200){
-                setQuestionId(response.data.data.question_id);
                 setQuestion(response.data.data.question);
+                setQuestionId(response.data.data.question_id);
                 formDataForHint.append("question",response.data.data.question);
                 const responseForHint=await axios.post("http://localhost:5000/api/chatgpt/hint" , formDataForHint)
                 if(responseForHint.status===200){
                     setClue(responseForHint.data.message)
                 }else{
                     console.log("Failed to fetch hint");
-                }
-                setReview(true);
+                }   
             } else {
                 console.error('Failed to fetch hint from Flask using GET');
             }
         } catch (error) {
             console.error('Error:', error);
         }
-        setAnswer("");
-        setReview(false);
     };
     //GET
     useEffect(() => { fetchData(); } , []);
@@ -66,6 +65,7 @@ function Interview(){
             formData.append("question_id", questionId);
             const response = await axios.post('http://localhost:5000/api/users/addTrainingHistory',formData);
             if (response.status === 200) {
+                console.log(response.data);
                 setFeedback(response.data.data.feedback);
                 setScore(response.data.data.score);
             } else {

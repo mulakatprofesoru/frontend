@@ -38,12 +38,12 @@ function DenemeQuestion(){
                     setQuestionId(response.data.data[0].questionId);
                     setQuestion(response.data.data[0].question);
                     formDataForHint.append("question",response.data.data[0].question);
-                    // const responseForHint=await axios.post("http://localhost:5000/api/chatgpt/hint" , formDataForHint)
-                    // if(responseForHint.status===200){
-                    //     setClue(responseForHint.data.message)
-                    // }else{
-                    //     console.log("Failed to fetcg hint");
-                    // }
+                    const responseForHint=await axios.post("http://localhost:5000/api/chatgpt/hint" , formDataForHint)
+                    if(responseForHint.status===200){
+                        setClue(responseForHint.data.message)
+                    }else{
+                        console.log("Failed to fetcg hint");
+                    }
                 } else {
                     console.error('Failed to fetch data from Flask using GET');
                 }

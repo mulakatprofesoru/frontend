@@ -61,6 +61,7 @@ function History(){
     box.style.display = "none";
     setModal(false);
     setCurrentHistorytId(-1);
+    setCurrentHistorytIdForQuestionBox(-1);
   }
 
   function openModal(id){
