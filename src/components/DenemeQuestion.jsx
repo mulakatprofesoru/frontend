@@ -15,7 +15,8 @@ function DenemeQuestion(){
     const [questionId , setQuestionId]=useState();
     const [question,setQuestion]=useState("Question");
     const [questions,setQuestions]=useState(null);
-    const [clue,setClue]=useState("There is a clue for question");
+    const [clue,setClue]=useState("");
+    const [clues,setClues]=useState([]);
     const [answer ,setAnswer]=useState("");
     const [questionAnswer,setData]=useState([]);
     const { speak , voices } = useSpeechSynthesis();
@@ -29,16 +30,37 @@ function DenemeQuestion(){
     const { denemeNumber } = useParams(); 
     const formDataForHint = new FormData();
     
+    async function helper(question){
+        try {
+            formDataForHint.set("question",question.question);
+            const responseForHint= await axios.post("http://localhost:5000/api/chatgpt/hint" , formDataForHint);
+            if(responseForHint.status===200){
+                setClues(prevData =>{
+                    return [...prevData,{question:question.question , clue:responseForHint.data.message , questionId:question.questionId}]});
+            }else{
+                console.log("Failed to fetcg hint");
+            }
+        } catch (error) { 
+        }
+    }
+
+    async function  getHint(questions){
+        questions.forEach(question => {
+           helper(question);
+        });
+
+    } 
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await axios.get('http://localhost:5000/api/tests/'+denemeNumber);
                 if (response.status === 200){
-                    setQuestions(response.data.data);
-                    setQuestionId(response.data.data[0].questionId);
                     setQuestion(response.data.data[0].question);
                     formDataForHint.append("question",response.data.data[0].question);
                     const responseForHint=await axios.post("http://localhost:5000/api/chatgpt/hint" , formDataForHint)
+                    setQuestions(response.data.data);
+                    setQuestionId(response.data.data[0].questionId);
                     if(responseForHint.status===200){
                         setClue(responseForHint.data.message)
                     }else{
@@ -47,9 +69,11 @@ function DenemeQuestion(){
                 } else {
                     console.error('Failed to fetch data from Flask using GET');
                 }
+                getHint(response.data.data);
             } catch (error) {
                 console.error('Error:', error);
             }
+
         };
             fetchData();
     }, []);
@@ -75,16 +99,17 @@ function DenemeQuestion(){
     };
 
     function takeAnswer(){
-        if(index<11){     
+        console.log(clues);
+        if(index<11){
             setData(prevData => {return [...prevData, {question_id: questionId, answer: answer}];});
             setAnswer("");
             if(index<10){
-                setQuestion(questions[index].question);
-                setQuestionId(questions[index].questionId);
+                setClue(clues[index].clue);
+                setQuestion(clues[index].question);
+                setQuestionId(clues[index].questionId);
             }else{
                 let temp=questionAnswer;
                 temp[9]={question_id: questionId, answer: answer};
-                console.log(temp);
                 setData(temp);
                 sendPostRequest();
                 setFinished(true);
