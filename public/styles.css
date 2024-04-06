@@ -372,3 +372,17 @@ grid-template-columns: 300px 300px 300px;
 .loading p {
     font-size: larger;
 }
+
+.loading2{
+    position: fixed;
+    top: 30%;
+    left: 45%;
+    padding: auto;
+    margin: auto;
+    background-color: rgba(0, 0, 0, 0);
+    border-radius: 7x;
+}
+
+.loading2 p {
+    font-size: larger;
+}

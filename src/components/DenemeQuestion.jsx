@@ -8,6 +8,7 @@ import FindInPageIcon from '@mui/icons-material/FindInPage';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { useNavigate , useParams } from 'react-router-dom';
+import { SyncLoader } from "react-spinners";
 import axios from "axios";
 
 
@@ -20,9 +21,10 @@ function DenemeQuestion(){
     const [answer ,setAnswer]=useState("");
     const [questionAnswer,setData]=useState([]);
     const { speak , voices } = useSpeechSynthesis();
-    const [finished , setFinished] = useState(false);
+    const [finished , setFinished] = useState(true);
     const [score , setScore] = useState(0);
     const [index , setIndex] = useState(1);
+    const [loading , setLoading] = useState(true);
     const navigate = useNavigate();
     const DenemePage = () => {
         navigate('/deneme');
@@ -80,6 +82,7 @@ function DenemeQuestion(){
 
     const sendPostRequest = async () => {
         const formData= new FormData();
+        setLoading(true);
 
         try {
             formData.append('test_id', denemeNumber);
@@ -89,6 +92,8 @@ function DenemeQuestion(){
 
             if (response.statusText ==="OK") {
                 setScore(response.data.score);
+                console.log(response.data);
+                setLoading(false);
                 console.log('Data sent successfully to Flask using POST');
             } else {
                 console.error('Failed to send data to Flask using POST');
@@ -99,7 +104,7 @@ function DenemeQuestion(){
     };
 
     function takeAnswer(){
-        console.log(clues);
+        //console.log(clues);
         if(index<11){
             setData(prevData => {return [...prevData, {question_id: questionId, answer: answer}];});
             setAnswer("");
@@ -173,13 +178,22 @@ function DenemeQuestion(){
                     <p id="hoverWindow">{clue}</p>
                 </div>
                 <div className="pass">
-                    <p>Pass</p>
+                    <p>Soruyu Atla</p>
                     <ArrowForwardIcon onClick={takeAnswer} fontSize="large"/>
                 </div>
                 </>
                 )}
 
-                {finished&&(
+                {(finished && loading)&&(
+                <div className="loading2">
+                    <SyncLoader
+                        size={20}
+                    />
+                    <p>Yükleniyor...</p>
+                </div>
+                )}
+             
+                {(finished&&!loading)&&(
                     <div className="score-window">
                         <p style={{margin: "auto",marginTop: "5px" ,marginBottom:"10px",}}>Deneme Puanı</p>
                         <p style={{marginTop: "10px", marginBottom:"20px"}}>{score}</p>
