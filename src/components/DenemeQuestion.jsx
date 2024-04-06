@@ -21,10 +21,10 @@ function DenemeQuestion(){
     const [answer ,setAnswer]=useState("");
     const [questionAnswer,setData]=useState([]);
     const { speak , voices } = useSpeechSynthesis();
-    const [finished , setFinished] = useState(true);
+    const [finished , setFinished] = useState(false);
     const [score , setScore] = useState(0);
     const [index , setIndex] = useState(1);
-    const [loading , setLoading] = useState(true);
+    const [loading , setLoading] = useState(false);
     const navigate = useNavigate();
     const DenemePage = () => {
         navigate('/deneme');
