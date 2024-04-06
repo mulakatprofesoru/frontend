@@ -27,17 +27,18 @@ function History(){
       question: history[event.target.id].question,
       userAnswer : history[event.target.id].user_answer,
       answer: history[event.target.id].correct_answer,
-      score: history[event.target.id].user_id
+      score: history[event.target.id].score
     });
     openModal(event.target.id);  
   };
 
   const getCurrentIdForTest = (event , data) => {
+    console.log("data:" ,data);
     setCurrentHistory({
       question: data.question,
       userAnswer : data.user_answer,
       answer: data.correct_answer,
-      score: "0"
+      score: data.question_score
     });
     openModal(event.target.id);  
   };
@@ -133,7 +134,7 @@ function History(){
 
   function handleTestQuestion(event,test){
     setTestQuestions(test.questions);
-    setTestScore(test.score);
+    setTestScore(test.test_score);
     var box= document.getElementById("question-box");
     if(currentHistoryIdForQuestionBox ===-1){
       setCurrentHistorytIdForQuestionBox(event.target.id);
@@ -176,7 +177,6 @@ function History(){
               userAnswer={currentHistory.userAnswer}
               answer={currentHistory.answer}
               skor={currentHistory.score}
-              open={currentHistoryPage==="Training"? true:false}
             />
       {
         currentHistoryPage === "Training" ? (
@@ -199,7 +199,7 @@ function History(){
               {tests.map((test , index) => {
                 return(
                 <div key={index} className="history-container">
-                  <button style={{fontSize:"larger"}} onClick={(event) => handleTestQuestion(event, test)}  id={index}>Deneme {index}</button>
+                  <button style={{fontSize:"larger", width:"300px"}} onClick={(event) => handleTestQuestion(event, test)}  id={index}>Deneme {index}</button>
                 </div>);
               })}
             </div>

@@ -227,7 +227,7 @@ grid-template-columns: 300px 300px 300px;
     max-width:700px;
     min-height:500px;   
     top: 20%;
-    left: 60%;
+    left: 50%;
 }
 
 #helper-box p{
@@ -288,7 +288,7 @@ grid-template-columns: 300px 300px 300px;
     flex-direction: column;
     position: fixed;
     top: 10%;
-    left: 40%;
+    left: 30%;
 }
 
 #question-box  .button {
@@ -376,7 +376,7 @@ grid-template-columns: 300px 300px 300px;
 .loading2{
     position: fixed;
     top: 30%;
-    left: 45%;
+    left: 48%;
     padding: auto;
     margin: auto;
     background-color: rgba(0, 0, 0, 0);

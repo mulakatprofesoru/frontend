@@ -7,7 +7,7 @@ function HistoryHelperBox (props){
                 <p><span className="question-label">Q: </span>{props.question}</p>
                 <p><span className="question-label">UA: </span>{props.userAnswer}</p>
                 <p><span className="question-label">A: </span>{props.answer}</p>
-                { props.open &&(<p><span className="question-label">S: </span>{props.skor}</p>)}
+                <p><span className="question-label">S: </span>{props.skor}</p>
             </div>
     );
 }
