@@ -323,12 +323,13 @@ grid-template-columns: 300px 300px 300px;
 
 .review-window{
     position: fixed;
-    top: 20%;
+    overflow: auto;
+    top: 15%;
     left: 35%;
     border-radius: 7px;
     box-shadow: 0 1px 5px rgb(138, 137, 137);
     background-color: aliceblue;
-    height: 600px;
+    height: 650px;
     width: 600px;
 }
 .review-box1{

@@ -121,11 +121,11 @@ function Interview(){
                         <ArrowBackIosIcon className="arrow-back" fontSize="large" onClick={HomePage}/>
                         <div className="interview">
                             <div className="question">
-                                <textarea  rows="5" cols="100"  value={question}>{question}</textarea>
+                                <textarea spellCheck="false" rows="5" cols="100"  value={question} autoComplete="off">{question}</textarea>
                                 <VolumeUpIcon className="voice" fontSize="large" onClick={voiceText}></VolumeUpIcon>
                             </div>
                             <div className="answer">
-                                <textarea  rows="8" cols="100"  placeholder="Please enter your answer here" onChange={(event)=>{setAnswer(event.target.value)}} value={answer}></textarea>
+                                <textarea spellCheck="false" autoComplete="off" rows="8" cols="100"  placeholder="Please enter your answer here" onChange={(event)=>{setAnswer(event.target.value)}} value={answer}></textarea>
                                 <MicIcon className="mic" fontSize="large" onClick={takeSpeech}></MicIcon>
                             </div>
                                 <SendIcon className="sendButton" fontSize="large" onClick={sendPostRequest} />
