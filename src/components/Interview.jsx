@@ -1,9 +1,8 @@
 import React, { useState ,useEffect } from "react";
 import { useNavigate  ,  useParams } from 'react-router-dom';
 import SendIcon from '@mui/icons-material/Send';
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import MicIcon from '@mui/icons-material/Mic';
-import { useSpeechSynthesis } from 'react-speech-kit';
+import { useSpeechSynthesis ,useSpeechRecognition} from 'react-speech-kit';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import FindInPageIcon from '@mui/icons-material/FindInPage';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
@@ -11,6 +10,8 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CloseIcon from '@mui/icons-material/Close';
 import { SyncLoader } from "react-spinners";
 import axios from 'axios';
+
+
 
 function Interview(){
     const [questionId , setQuestionId]=useState();
@@ -21,13 +22,18 @@ function Interview(){
     const [label , setLabel]=useState("Soruyu Atla");
     const [clue , setClue]=useState("There is a clue for question");
     const [answer , setAnswer]=useState("");
-    const [questionAnswer , setData]=useState({questionData:question ,answerData:null});
     const { speak , voices } = useSpeechSynthesis();
     const [review , setReview] = useState(false);
     const navigate = useNavigate();
     const HomePage = () => {
         navigate("/");
     }
+
+    const { listen, stop } = useSpeechRecognition({
+        onResult: (result) => {
+        setAnswer(result);
+        },
+    });
 
 
     const { interviewType } = useParams(); 
@@ -81,23 +87,13 @@ function Interview(){
         setReview(true);
     };
 
-    const {
-        transcript,
-        listening,
-        browserSupportsSpeechRecognition
-        } = useSpeechRecognition();
-    
-    if (!browserSupportsSpeechRecognition) {
-    return <span>Browser doesn't support speech recognition.</span>;
-    }
-    
-    function takeSpeech(){
-        SpeechRecognition.startListening({ language: 'tr' });
-        setAnswer(transcript);
-    }
+
         
     const voiceText = () => {
         speak({ text: question , voice:voices[1]});
+    };
+    const getVoice = () => {
+        listen({ lang:"en-GB"});
     };
 
     function openWindow() {
@@ -126,7 +122,7 @@ function Interview(){
                             </div>
                             <div className="answer">
                                 <textarea spellCheck="false" autoComplete="off" rows="8" cols="100"  placeholder="Please enter your answer here" onChange={(event)=>{setAnswer(event.target.value)}} value={answer}></textarea>
-                                <MicIcon className="mic" fontSize="large" onClick={takeSpeech}></MicIcon>
+                                <MicIcon className="mic" fontSize="large" onMouseDown={getVoice} onMouseUp={stop} ></MicIcon>
                             </div>
                                 <SendIcon className="sendButton" fontSize="large" onClick={sendPostRequest} />
                         </div>
