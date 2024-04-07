@@ -1,8 +1,7 @@
 import React, { useState ,useEffect } from "react";
 import SendIcon from '@mui/icons-material/Send';
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import MicIcon from '@mui/icons-material/Mic';
-import { useSpeechSynthesis } from 'react-speech-kit';
+import { useSpeechSynthesis,useSpeechRecognition } from 'react-speech-kit';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import FindInPageIcon from '@mui/icons-material/FindInPage';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -29,6 +28,13 @@ function DenemeQuestion(){
     const DenemePage = () => {
         navigate('/deneme');
     }
+
+
+    const { listen, stop } = useSpeechRecognition({
+        onResult: (result) => {
+        setAnswer(result);
+        },
+    });
     const { denemeNumber } = useParams(); 
     const formDataForHint = new FormData();
     
@@ -121,24 +127,13 @@ function DenemeQuestion(){
             }
             setIndex(prevData =>{return(prevData+1);});
         }
-    }
-
-    const {
-        transcript,
-        browserSupportsSpeechRecognition
-        } = useSpeechRecognition();
-    
-    if (!browserSupportsSpeechRecognition) {
-    return <span>Browser doesn't support speech recognition.</span>;
-    }
-    
-    function takeSpeech(){
-        SpeechRecognition.startListening({ language: 'tr' });
-        setAnswer(transcript);
-    }
-        
+    }        
     const voiceText = () => {
         speak({ text: question , voice:voices[1]});
+    };
+
+    const getVoice = () => {
+        listen({ lang:"en-GB"});
     };
 
     function openWindow() {
@@ -169,7 +164,7 @@ function DenemeQuestion(){
                     </div>
                     <div className="answer">
                         <textarea  spellCheck="false" autoComplete="off" rows="8" cols="100"  placeholder="Please enter your answer here" onChange={(event)=>{setAnswer(event.target.value)}} value={answer}></textarea>
-                        <MicIcon className="mic" fontSize="large" onClick={takeSpeech}></MicIcon>
+                        <MicIcon className="mic" fontSize="large" onMouseDown={getVoice} onMouseUp={stop} ></MicIcon>
                     </div>
                         <SendIcon className="sendButton" fontSize="large" onClick={takeAnswer} />
                 </div>
